@@ -1,6 +1,6 @@
 # 4D Desenvolvimento Pessoal
 
-Site estático de https://4ddesenvolvimentopessoal.com.br
+Site estático de https://www.4ddesenvolvimentopessoal.com.br (o `.htaccess` redireciona as outras variações para este endereço).
 
 - `site/` — arquivos publicados em `/www/` no FTP da KingHost.
 - Cada push na branch `main` publica automaticamente (`.github/workflows/deploy.yml`).
