@@ -33,5 +33,6 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           local-dir: ./site/
-          # O login do FTP da KingHost já entra em /www (pasta pública).
-          server-dir: ./
+          # O login entra em /www, mas caminhos absolutos partem da pasta acima;
+          # com "./" a remoção de pastas antigas falha (550).
+          server-dir: /www/
