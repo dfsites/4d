@@ -1,3 +1,4 @@
+import { hasConfirmedContact } from '../config/companyConfig.mjs';
 import { esc } from '../lib/html.mjs';
 import { projectsSection, responsible } from '../lib/components.mjs';
 import { appliedColumns, axes, dimensions, fronts, segments } from '../content/metodo.mjs';
@@ -5,8 +6,9 @@ import { appliedColumns, axes, dimensions, fronts, segments } from '../content/m
 export const page = {
   path: '/',
   nav: 'inicio',
-  title: '4D Desenvolvimento Pessoal Ltda. | Educação e Tecnologia',
-  description: '4D Desenvolvimento Pessoal Ltda. (CNPJ 49.142.726/0001-58): educação, desenvolvimento e tecnologia para pessoas e organizações a partir do Método 4D.',
+  title: '4D Desenvolvimento Pessoal | Educação e Tecnologia',
+  description: 'Conheça a 4D Desenvolvimento Pessoal: soluções educacionais, plataformas e projetos digitais para pessoas e organizações, orientados pelo Método 4D.',
+  responsible: true,
 };
 
 function cubo() {
@@ -38,6 +40,7 @@ function metodo() {
           ${steps}
         </ol>
         <p class="nota">O Método 4D é um caminho de organização e desenvolvimento, não uma promessa de resultado. O que se colhe depende do contexto e da aplicação de cada pessoa, projeto ou organização.</p>
+        <p class="metodo__mais"><a class="link" href="/metodo-4d/">Entradas, saídas e um exemplo de cada dimensão</a></p>
       </div>
     </section>`;
 }
@@ -126,12 +129,12 @@ export function render(config) {
   return `<section class="hero" id="inicio" aria-labelledby="hero-titulo">
       <div class="container hero__grid">
         <div class="hero__texto">
-          <p class="rotulo">Educação, desenvolvimento e tecnologia</p>
-          <h1 id="hero-titulo">Desenvolvimento em quatro dimensões.</h1>
+          <h1 id="hero-titulo"><span class="rotulo hero__kicker">Educação, desenvolvimento e tecnologia com o Método 4D</span> <span class="hero__frase">Desenvolvimento em <span class="destaque">quatro dimensões</span>.</span></h1>
           <p class="hero__sub">A ${esc(config.brandName)} cria soluções educacionais, digitais e institucionais para desenvolver pessoas, profissionais, projetos e organizações.</p>
           <div class="hero__acoes">
-            <a class="btn" href="#metodo">Conheça o Método 4D</a>
-            <a class="link" href="/sobre/">Sobre a empresa</a>
+            ${hasConfirmedContact(config) ? '<a class="btn" href="/contato/" data-evento="clique_contato">Fale sobre um projeto</a>' : ''}
+            <a class="${hasConfirmedContact(config) ? 'link' : 'btn'}" href="#atuacao">Conheça as soluções</a>
+            <a class="link" href="/metodo-4d/">Entenda o Método 4D</a>
           </div>
         </div>
         ${cubo()}

@@ -8,6 +8,7 @@ import { absoluteUrl, pageUpdatedAt } from '../src/lib/html.mjs';
 import { layout } from '../src/lib/layout.mjs';
 import * as home from '../src/pages/home.mjs';
 import * as sobre from '../src/pages/sobre.mjs';
+import * as metodo from '../src/pages/metodo4d.mjs';
 import * as privacidade from '../src/pages/privacidade.mjs';
 import * as termos from '../src/pages/termos.mjs';
 import * as notFound from '../src/pages/404.mjs';
@@ -16,7 +17,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const src = join(root, 'src');
 const out = join(root, 'site');
 
-export const pages = [home, sobre, privacidade, termos, notFound];
+export const pages = [home, sobre, metodo, privacidade, termos, notFound];
 
 function outputFile(page) {
   if (page.output) return page.output;
@@ -73,9 +74,12 @@ export async function build(config = companyConfig) {
   }
 
   const version = await assetVersion();
+  const css = minifyCss(await readFile(join(src, 'assets/css/style.css'), 'utf8'))
+    .replaceAll('url("../fonts/', 'url("/assets/fonts/');
+  await rm(join(out, 'assets/css'), { recursive: true, force: true });
   const written = [];
   for (const mod of pages) {
-    const page = { ...mod.page, assetVersion: version };
+    const page = { ...mod.page, assetVersion: version, css };
     const file = join(out, outputFile(page));
     await mkdir(dirname(file), { recursive: true });
     await writeFile(file, `${minifyHtml(layout(config, page, mod.render(config)))}\n`);
@@ -93,10 +97,6 @@ export async function build(config = companyConfig) {
     `User-agent: *\nAllow: /\n\nSitemap: ${absoluteUrl(config, '/sitemap.xml')}\n`);
 
   await writeFile(join(out, 'site.webmanifest'), `${JSON.stringify(manifest(config), null, 2)}\n`);
-
-  const css = join(out, 'assets/css/style.css');
-  await writeFile(css, minifyCss(await readFile(css, 'utf8')));
-
   return written;
 }
 

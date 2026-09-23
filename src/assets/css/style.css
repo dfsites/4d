@@ -82,12 +82,12 @@ main:focus { outline: none; }
 .btn {
   display: inline-flex; align-items: center; min-height: 48px;
   padding: .8rem 1.5rem;
-  background: var(--tinta); color: var(--branco);
+  background: var(--roxo); color: var(--branco);
   font-weight: 600; text-decoration: none;
   border-radius: var(--raio);
-  transition: background-color .2s;
+  transition: background-color .2s, transform .2s, box-shadow .2s;
 }
-.btn:hover { background: var(--roxo-escuro); }
+.btn:hover { background: var(--roxo-escuro); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(91, 61, 245, .3); }
 
 .link {
   font-weight: 600; color: var(--roxo-escuro);
@@ -150,7 +150,25 @@ main:focus { outline: none; }
     radial-gradient(circle at 10% 90%, rgba(255, 181, 71, .12), transparent 40%);
 }
 .hero__grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 5rem); align-items: center; }
-.hero h1 { font-size: clamp(2rem, 5.2vw, 4rem); max-width: 12ch; hyphens: manual; }
+.hero h1 { font-size: clamp(2rem, 5.2vw, 4rem); hyphens: manual; }
+.hero__kicker { display: block; line-height: 1.5; }
+.hero__frase { display: block; max-width: 12ch; }
+.destaque {
+  background: linear-gradient(120deg, var(--roxo) 10%, #8f6bff 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-decoration: underline;
+  text-decoration-color: var(--ambar);
+  text-decoration-thickness: .09em;
+  text-underline-offset: .14em;
+  text-decoration-skip-ink: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .destaque { background: none; color: var(--roxo); }
+}
 .hero__sub { max-width: 34em; font-size: clamp(1.08rem, 1.6vw, 1.25rem); color: var(--suave); }
 .hero__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; margin-top: 2rem; }
 
@@ -321,6 +339,30 @@ main:focus { outline: none; }
 .texto p, .texto li { color: #3c3a4d; }
 .texto ul, .texto ol { margin: 0 0 1em; padding-left: 1.25rem; }
 .texto li { margin-bottom: .4rem; }
+.texto h3 { margin-top: 1.5rem; font-size: 1.1rem; }
+
+.metodo__mais { margin-top: 1.5rem; }
+.etapas { display: grid; gap: 1.5rem; }
+.etapa {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  background: var(--branco); border: 1px solid var(--linha); border-radius: 18px;
+}
+.etapa { --cor-etapa: var(--roxo); border-top: 4px solid var(--cor-etapa); }
+.etapa:nth-child(2) { --cor-etapa: #8f6bff; }
+.etapa:nth-child(3) { --cor-etapa: #ff9f43; }
+.etapa:nth-child(4) { --cor-etapa: #3a3558; }
+.etapa .etapa__num { margin: 0; font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1; color: var(--cor-etapa); }
+.etapa:nth-child(3) .etapa__num { color: #e07b12; }
+.etapa h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+.etapa__lead { font-weight: 600; color: var(--tinta); }
+.etapa p, .etapa li { color: #3c3a4d; }
+.etapa__pergunta { padding: .9rem 1rem; background: var(--lavanda); border-left: 3px solid var(--cor-etapa); border-radius: 0 10px 10px 0; }
+.etapa__fluxo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 2rem; margin-top: 1.25rem; }
+.etapa h3 { font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--roxo-escuro); }
+.etapa ul { margin: 0 0 1rem; padding-left: 1.1rem; }
+.etapa li { margin-bottom: .35rem; }
+.etapa__aplicado { margin-top: .5rem !important; padding: 1rem 0 0 !important; list-style: none; border-top: 1px solid var(--linha); font-size: .95rem; }
 
 /* Rodapé */
 .rodape { background: var(--tinta); color: #b9b5d1; font-size: .93rem; }
@@ -384,6 +426,8 @@ main:focus { outline: none; }
   body { font-size: 1rem; }
   .container { width: min(100% - 2rem, var(--largura)); }
   .dimensoes { grid-template-columns: minmax(0, 1fr); row-gap: 2.5rem; }
+  .etapa { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+  .etapa__fluxo { grid-template-columns: minmax(0, 1fr); }
   .dimensao { padding-right: 0; }
   .lista-colunas { grid-template-columns: minmax(0, 1fr); }
   .frente { grid-template-columns: 2.5rem minmax(0, 1fr); }

@@ -9,6 +9,7 @@ export function absoluteUrl(config, path) {
 }
 
 export function pageUpdatedAt(config, page) {
+  if (page.updatedAt) return page.updatedAt;
   return page.legal ? config.legalUpdatedAt : config.contentUpdatedAt;
 }
 

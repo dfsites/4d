@@ -2,14 +2,14 @@ import { hasConfirmedContact } from '../config/companyConfig.mjs';
 import { esc } from './html.mjs';
 
 export function logo() {
-  return `<span class="logo__marca" aria-hidden="true">4D</span>
-        <span class="logo__nome">Desenvolvimento<br>Pessoal</span>`;
+  return `<span class="logo__marca">4D</span>
+        <span class="logo__nome">Desenvolvimento <br>Pessoal</span><span class="sr-only"> — página inicial</span>`;
 }
 
 export function navItems(config) {
   const items = [
     { href: '/sobre/', label: 'A empresa', key: 'sobre' },
-    { href: '/#metodo', label: 'Método 4D', key: 'metodo' },
+    { href: '/metodo-4d/', label: 'Método 4D', key: 'metodo' },
     { href: '/#atuacao', label: 'Atuação', key: 'atuacao' },
     { href: '/#organizacoes', label: 'Organizações', key: 'organizacoes' },
   ];
@@ -23,7 +23,7 @@ export function header(config, current) {
     .join('\n          ');
   return `<header class="topo">
     <div class="container topo__inner">
-      <a href="/" class="logo" aria-label="${esc(config.brandName)} — página inicial">
+      <a href="/" class="logo">
         ${logo()}
       </a>
       <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu-principal">
@@ -56,9 +56,10 @@ export function contactLinks(config) {
   if (!hasConfirmedContact(config)) return '';
   const c = config.contact;
   const items = [];
-  if (c.email) items.push(`<li><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></li>`);
-  if (c.phone) items.push(`<li><a href="tel:${esc(c.phone.replace(/\D/g, ''))}">${esc(c.phone)}</a></li>`);
-  if (c.whatsapp) items.push(`<li><a href="https://wa.me/${esc(c.whatsapp.replace(/\D/g, ''))}" rel="noopener" target="_blank">WhatsApp</a></li>`);
+  const ev = 'data-evento="clique_contato"';
+  if (c.email) items.push(`<li><a href="mailto:${esc(c.email)}" ${ev} data-canal="email">${esc(c.email)}</a></li>`);
+  if (c.phone) items.push(`<li><a href="tel:${esc(c.phone.replace(/\D/g, ''))}" ${ev} data-canal="telefone">${esc(c.phone)}</a></li>`);
+  if (c.whatsapp) items.push(`<li><a href="https://wa.me/${esc(c.whatsapp.replace(/\D/g, ''))}" rel="noopener" target="_blank" ${ev} data-canal="whatsapp">WhatsApp</a></li>`);
   return `<ul class="rodape__links rodape__contato">${items.join('')}</ul>`;
 }
 
@@ -90,7 +91,7 @@ export function responsible(config, headingLevel = 2) {
 
 export function projectCard(project) {
   const title = project.url
-    ? `<a href="${esc(project.url)}" rel="noopener">${esc(project.name)}</a>`
+    ? `<a href="${esc(project.url)}" rel="noopener" data-evento="clique_projeto">${esc(project.name)}</a>`
     : esc(project.name);
   const img = project.image || project.logo;
   return `<li class="projeto">
@@ -98,7 +99,7 @@ export function projectCard(project) {
           <p class="projeto__meta">${[project.category, project.status].filter(Boolean).map(esc).join(' · ')}</p>
           <h3>${title}</h3>
           ${project.description ? `<p>${esc(project.description)}</p>` : ''}
-          ${project.url && project.cta ? `<a class="link" href="${esc(project.url)}" rel="noopener">${esc(project.cta)}</a>` : ''}
+          ${project.url && project.cta ? `<a class="link" href="${esc(project.url)}" rel="noopener" data-evento="clique_projeto">${esc(project.cta)}</a>` : ''}
         </li>`;
 }
 
@@ -129,7 +130,7 @@ export function footer(config) {
   return `<footer class="rodape">
     <div class="container rodape__grid">
       <div class="rodape__marca">
-        <a href="/" class="logo logo--claro" aria-label="${esc(config.brandName)} — página inicial">
+        <a href="/" class="logo logo--claro">
           ${logo()}
         </a>
         <p>Educação, desenvolvimento e tecnologia em quatro dimensões.</p>
@@ -143,7 +144,7 @@ export function footer(config) {
         <p class="rodape__titulo">Institucional</p>
         <ul class="rodape__links">
           <li><a href="/sobre/">Sobre a 4D</a></li>
-          <li><a href="/#metodo">Método 4D</a></li>
+          <li><a href="/metodo-4d/">Método 4D</a></li>
           <li><a href="/politica-de-privacidade/">Política de Privacidade</a></li>
           <li><a href="/termos-de-uso/">Termos de Uso</a></li>
           ${contato}

@@ -8,8 +8,8 @@ RewriteCond %{HTTPS} off
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^ https://www.4ddesenvolvimentopessoal.com.br%{REQUEST_URI} [L,R=301]
 
-RewriteCond %{THE_REQUEST} \s/index\.html[\s?]
-RewriteRule ^index\.html$ https://www.4ddesenvolvimentopessoal.com.br/ [L,R=301]
+RewriteCond %{THE_REQUEST} \s/(.*/)?index\.html[\s?]
+RewriteRule ^(.*/)?index\.html$ https://www.4ddesenvolvimentopessoal.com.br/$1 [L,R=301]
 RewriteRule ^\.ftp-deploy-sync-state\.json$ - [F,L]
 
 DirectoryIndex index.html

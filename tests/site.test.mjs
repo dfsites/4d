@@ -36,7 +36,7 @@ before(async () => {
 });
 
 test('rotas obrigatórias existem e /contato não existe sem canal confirmado', () => {
-  for (const p of ['/', '/sobre/', '/politica-de-privacidade/', '/termos-de-uso/', '/404.html']) {
+  for (const p of ['/', '/sobre/', '/metodo-4d/', '/politica-de-privacidade/', '/termos-de-uso/', '/404.html']) {
     assert.ok(html[p], `falta ${p}`);
   }
   assert.equal(html['/contato/'], undefined);
@@ -114,7 +114,7 @@ test('canonical, sitemap e robots consistentes', async () => {
   }
   const sitemap = await readFile(join(site, 'sitemap.xml'), 'utf8');
   const locs = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
-  assert.equal(locs.length, 4);
+  assert.equal(locs.length, 5);
   for (const loc of locs) {
     assert.ok(loc.startsWith(companyConfig.canonicalUrl));
     await stat(fileForUrl(loc));
@@ -146,7 +146,7 @@ test('imagens têm alt e a Home não usa avatar fictício', () => {
   for (const [path, doc] of Object.entries(html)) {
     for (const [tag] of doc.matchAll(/<img\b[^>]*>/g)) assert.match(tag, /\salt="/, path);
   }
-  assert.doesNotMatch(html['/'], /responsavel__foto/);
+  assert.doesNotMatch(html['/'], /<img[^>]*responsavel__foto/);
 });
 
 test('seções condicionais: projetos, contato e redes sociais', () => {
@@ -227,4 +227,34 @@ test('SEO: títulos, descrições, Open Graph, ícones, manifesto e datas', asyn
 
   const sitemap = await readFile(join(site, 'sitemap.xml'), 'utf8');
   assert.match(sitemap, new RegExp(`politica-de-privacidade/</loc>\\s*<lastmod>${companyConfig.legalUpdatedAt}`));
+});
+
+test('Método 4D: página própria com entradas, saídas, exemplo, limites e dúvidas', () => {
+  const doc = html['/metodo-4d/'];
+  for (const t of ['O que entra', 'O que sai', 'Exemplo aplicado', 'Exemplo ilustrativo', 'Limites do método', 'Dúvidas frequentes', 'Próximo passo']) {
+    assert.ok(doc.includes(t), t);
+  }
+  assert.doesNotMatch(doc, /FAQPage/);
+  for (const path of ['/', '/sobre/']) assert.ok(html[path].includes('href="/metodo-4d/"'), `sem link para /metodo-4d/ em ${path}`);
+  assert.match(html['/'], /<h1 id="hero-titulo">.*Método 4D.*Desenvolvimento em <span class="destaque">quatro dimensões<\/span>\.<\/span><\/h1>/s);
+});
+
+test('schema: Person do responsável somente onde ele aparece, sem credenciais inventadas', () => {
+  const graph = (path) => JSON.parse(html[path].match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1])['@graph'];
+  for (const path of ['/', '/sobre/']) {
+    const person = graph(path).find((n) => n['@type'] === 'Person');
+    assert.equal(person.name, companyConfig.responsiblePerson.name);
+    assert.equal(person.worksFor['@id'], `${companyConfig.canonicalUrl}#organizacao`);
+    for (const k of ['alumniOf', 'hasCredential', 'award', 'sameAs', 'image']) assert.equal(person[k], undefined, k);
+  }
+  assert.ok(!graph('/metodo-4d/').some((n) => n['@type'] === 'Person'));
+});
+
+test('eventos GA4 preparados sem dados pessoais e sem lead falso', async () => {
+  const js = await readFile(join(site, 'assets/js/main.js'), 'utf8');
+  assert.match(js, /data-evento/);
+  assert.doesNotMatch(js, /generate_lead/);
+  const confirmado = { ...companyConfig, contact: { email: 'a@b.com', phone: null, whatsapp: null, confirmed: true } };
+  assert.match(contactLinks(confirmado), /data-evento="clique_contato" data-canal="email"/);
+  assert.match(projectsSection({ ...companyConfig, projects: [{ name: 'P', url: 'https://p.com', cta: 'Ver' }] }), /data-evento="clique_projeto"/);
 });

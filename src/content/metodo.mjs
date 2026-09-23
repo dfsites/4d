@@ -5,6 +5,9 @@ export const dimensions = [
     lead: 'Compreender antes de agir.',
     text: 'A dimensão do diagnóstico: entender o contexto, a situação atual, as necessidades, os problemas, as oportunidades e o potencial disponível.',
     keywords: ['contexto', 'situação atual', 'necessidades', 'problemas', 'oportunidades', 'potencial'],
+    question: 'Onde estamos, para quem é e o que realmente precisa mudar?',
+    inputs: ['Informações sobre o contexto e o público', 'Histórico, materiais e tentativas anteriores', 'Percepções de quem vive a situação'],
+    outputs: ['Diagnóstico da situação atual', 'Necessidades e problemas priorizáveis', 'Oportunidades e recursos disponíveis'],
     applied: {
       pessoas: 'Autoconhecimento, momento de vida e de carreira, pontos fortes e lacunas.',
       projetos: 'Público, problema a resolver, conhecimento disponível e referências.',
@@ -17,6 +20,9 @@ export const dimensions = [
     lead: 'Transformar compreensão em direção.',
     text: 'Definir objetivos, prioridades e escolhas. É onde a estratégia, o planejamento e o posicionamento ganham forma.',
     keywords: ['objetivos', 'prioridades', 'escolhas', 'estratégia', 'planejamento', 'posicionamento'],
+    question: 'Aonde queremos chegar e o que fica de fora, por enquanto?',
+    inputs: ['Diagnóstico da etapa Descobrir', 'Recursos, prazos e restrições reais', 'Expectativas de quem decide'],
+    outputs: ['Objetivos claros e prioridades', 'Escopo, formato e posicionamento definidos', 'Plano de execução com etapas'],
     applied: {
       pessoas: 'Metas, prioridades e um plano de desenvolvimento realista.',
       projetos: 'Proposta, formato, escopo e posicionamento do produto ou curso.',
@@ -29,6 +35,9 @@ export const dimensions = [
     lead: 'Construir capacidade.',
     text: 'Desenvolver conhecimento, habilidades e competências — e também produtos, soluções, metodologias e tecnologia que sustentam a execução.',
     keywords: ['conhecimento', 'habilidades', 'competências', 'produtos', 'soluções', 'metodologias', 'tecnologia'],
+    question: 'O que precisa ser aprendido, criado ou construído para executar o plano?',
+    inputs: ['Plano e prioridades da etapa Decidir', 'Conhecimento disponível e referências', 'Ferramentas e tecnologia adequadas'],
+    outputs: ['Competências desenvolvidas', 'Conteúdos, materiais ou metodologia', 'Solução construída: curso, plataforma, site, aplicativo ou automação'],
     applied: {
       pessoas: 'Estudo, prática, hábitos e competências aplicadas ao dia a dia.',
       projetos: 'Conteúdo, metodologia, materiais, plataforma e experiência de aprendizagem.',
@@ -41,6 +50,9 @@ export const dimensions = [
     lead: 'Aplicar e evoluir.',
     text: 'Colocar em prática o que foi desenvolvido para gerar diferenciação, posicionamento, impacto e evolução contínua.',
     keywords: ['diferenciação', 'evolução', 'posicionamento', 'impacto', 'reconhecimento', 'resultados'],
+    question: 'Como colocar em uso, comunicar e aprender com o que foi feito?',
+    inputs: ['Solução ou competência desenvolvida', 'Público e canais definidos', 'Critérios para acompanhar o uso'],
+    outputs: ['Solução em uso real', 'Comunicação e presença mais claras', 'Aprendizados que alimentam um novo ciclo'],
     applied: {
       pessoas: 'Aplicação consistente, posicionamento profissional e evolução contínua.',
       projetos: 'Lançamento, uso real, aprendizado com o público e melhoria contínua.',

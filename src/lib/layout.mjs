@@ -15,13 +15,21 @@ function googleTag(config) {
   const id = config.analytics?.googleId;
   if (!id) return '';
   return `
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=${esc(id)}"></script>
+  <!-- Google tag (gtag.js), carregado após o load para não disputar a renderização -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', '${esc(id)}');
+    addEventListener('load', function () {
+      var carregar = function () {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=${esc(id)}';
+        document.head.appendChild(s);
+      };
+      if ('requestIdleCallback' in window) requestIdleCallback(carregar, { timeout: 2000 }); else setTimeout(carregar, 1);
+    });
   </script>`;
 }
 
@@ -71,7 +79,7 @@ export function layout(config, page, body) {
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/style.css?v=${page.assetVersion}">
+  <style>${page.css}</style>
   <script>document.documentElement.classList.add('js')</script>${schema}
 </head>
 <body>

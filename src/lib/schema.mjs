@@ -68,6 +68,21 @@ export function buildSchema(config, page) {
 
   const graph = [organization, website, webpage];
 
+  const person = config.responsiblePerson;
+  if (page.responsible && person?.name) {
+    const node = {
+      '@type': 'Person',
+      '@id': `${site}#responsavel`,
+      name: person.name,
+      jobTitle: person.role,
+      description: person.bio,
+      worksFor: { '@id': orgId },
+    };
+    if (person.linkedin) node.sameAs = [person.linkedin];
+    if (person.photo) node.image = absoluteUrl(config, person.photo);
+    graph.push(node);
+  }
+
   if (page.breadcrumb?.length) {
     const items = [{ name: 'Início', path: '/' }, ...page.breadcrumb];
     const breadcrumbId = `${pageUrl}#breadcrumb`;

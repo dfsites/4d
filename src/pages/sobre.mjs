@@ -5,9 +5,10 @@ import { axes, dimensions, segments } from '../content/metodo.mjs';
 export const page = {
   path: '/sobre/',
   nav: 'sobre',
-  title: 'Sobre a 4D Desenvolvimento Pessoal Ltda. | Método 4D',
-  description: 'Conheça a 4D Desenvolvimento Pessoal Ltda. (CNPJ 49.142.726/0001-58), de Florianópolis/SC, e o Método 4D: Descobrir, Decidir, Desenvolver e Destacar.',
+  title: 'Sobre a 4D Desenvolvimento Pessoal | Empresa e atuação',
+  description: 'Conheça a 4D Desenvolvimento Pessoal Ltda. (CNPJ 49.142.726/0001-58): empresa de educação, desenvolvimento e tecnologia, sua estrutura, atuação e responsável.',
   schemaType: 'AboutPage',
+  responsible: true,
   breadcrumb: [{ name: 'Sobre a 4D', path: '/sobre/' }],
 };
 
@@ -38,7 +39,7 @@ export function render(config) {
         <h2>O Método 4D</h2>
         <p>O Método 4D organiza o desenvolvimento em quatro dimensões que se sucedem e se renovam:</p>
         <ol>${dims}</ol>
-        <p>Ele se aplica a pessoas e profissionais, mas também é a forma como a 4D pensa e constrói seus cursos, produtos, plataformas e projetos. <a class="link" href="/#metodo">Ver o Método 4D em detalhe</a></p>
+        <p>Ele se aplica a pessoas e profissionais, mas também é a forma como a 4D pensa e constrói seus cursos, produtos, plataformas e projetos. <a class="link" href="/metodo-4d/">Ver o Método 4D em detalhe</a></p>
 
         <h2>Identificação em produtos e serviços</h2>
         <p>O nome <strong>${esc(config.legalName)}</strong> pode aparecer em rodapés, páginas de pagamento, termos, certificados, plataformas e produtos. Nesses casos, a 4D é a empresa responsável pela solução — os dados oficiais da empresa estão no rodapé deste site. Condições comerciais específicas, como preços, prazos e políticas de reembolso, são informadas no próprio produto ou contrato.</p>
