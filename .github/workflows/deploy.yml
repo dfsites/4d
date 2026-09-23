@@ -23,5 +23,5 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
           local-dir: ./site/
-          server-dir: /www/
-          log-level: verbose
+          # O login do FTP da KingHost já entra em /www (pasta pública).
+          server-dir: ./
