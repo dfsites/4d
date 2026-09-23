@@ -2,6 +2,6 @@
 
 Site estático de https://4ddesenvolvimentopessoal.com.br
 
-- `site/` — arquivos publicados na raiz do FTP da KingHost.
+- `site/` — arquivos publicados em `/www/` no FTP da KingHost.
 - Cada push na branch `main` publica automaticamente (`.github/workflows/deploy.yml`).
 - A senha do FTP fica no secret `FTP_PASSWORD` do repositório (Settings → Secrets and variables → Actions).
