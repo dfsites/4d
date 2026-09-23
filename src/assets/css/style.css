@@ -399,7 +399,9 @@ main:focus { outline: none; }
   .matriz thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .matriz tbody tr { padding: 1.25rem 0; border-bottom: 1px solid var(--linha); }
   .matriz th, .matriz td { padding: .35rem 0; border: 0; }
-  .matriz tbody th { white-space: normal; margin-bottom: .4rem; }
+  /* Sobrescreve width: 18% do desktop — senão Descobrir/Desenvolver quebram no meio da palavra. */
+  .matriz tbody th { width: 100%; white-space: nowrap; margin-bottom: .65rem; overflow-wrap: normal; }
+  .matriz td { margin-bottom: .65rem; }
   .matriz td::before {
     content: attr(data-rotulo); display: block;
     font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta);
