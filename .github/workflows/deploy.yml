@@ -15,6 +15,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build e testes
+        run: npm test
+
       - name: Enviar site/ via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

@@ -1,0 +1,13 @@
+{
+  "name": "4d-desenvolvimento-pessoal",
+  "private": true,
+  "type": "module",
+  "description": "Site institucional da 4D Desenvolvimento Pessoal Ltda.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "lint": "node scripts/lint.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "npm run lint && npm test"
+  }
+}

@@ -1,0 +1,184 @@
+import { test, before } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile, readdir, stat } from 'node:fs/promises';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { build } from '../scripts/build.mjs';
+import { companyConfig } from '../src/config/companyConfig.mjs';
+import { footer, projectsSection, contactLinks, socialLinks, navItems } from '../src/lib/components.mjs';
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const site = join(root, 'site');
+const html = {};
+
+async function walk(dir) {
+  const files = [];
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const p = join(dir, entry.name);
+    if (entry.isDirectory()) files.push(...await walk(p));
+    else files.push(p);
+  }
+  return files;
+}
+
+function fileForUrl(url) {
+  const path = new URL(url, companyConfig.canonicalUrl).pathname;
+  return path.endsWith('/') ? join(site, path, 'index.html') : join(site, path);
+}
+
+before(async () => {
+  const pages = await build();
+  for (const p of pages) {
+    const f = p.output ? join(site, p.output) : fileForUrl(p.path);
+    html[p.path] = await readFile(f, 'utf8');
+  }
+});
+
+test('rotas obrigatórias existem e /contato não existe sem canal confirmado', () => {
+  for (const p of ['/', '/sobre/', '/politica-de-privacidade/', '/termos-de-uso/', '/404.html']) {
+    assert.ok(html[p], `falta ${p}`);
+  }
+  assert.equal(html['/contato/'], undefined);
+});
+
+test('cada página tem exatamente um H1', () => {
+  for (const [path, doc] of Object.entries(html)) {
+    assert.equal((doc.match(/<h1[\s>]/g) || []).length, 1, path);
+  }
+});
+
+test('remoções obrigatórias: redes sociais, depoimentos, formulário e contatos não confirmados', async () => {
+  const files = (await walk(site)).filter((f) => /\.(html|css|js|xml|txt)$/.test(f));
+  for (const f of files) {
+    const doc = await readFile(f, 'utf8');
+    assert.doesNotMatch(doc, /instagram|facebook|twitter\.com|linkedin\.com|tiktok|youtube/i, f);
+    assert.doesNotMatch(doc, /depoiment|testimonial|nome do cliente|avalia[çc][õo]es/i, f);
+    assert.doesNotMatch(doc, /<form|<input|<textarea|type="submit"/i, f);
+    assert.doesNotMatch(doc, /mailto:|tel:|wa\.me|whatsapp/i, f);
+    assert.doesNotMatch(doc, /comprovado|garantid|revolucion|fórmula definitiva|vagas abertas|inscrições abertas|compre agora/i, f);
+  }
+});
+
+test('dados da empresa ficam no rodapé de todas as páginas (e não no corpo da Home e de /sobre)', () => {
+  const { cnpj, address } = companyConfig;
+  for (const p of ['/', '/sobre/']) {
+    const main = html[p].split('<main')[1].split('</main>')[0];
+    assert.ok(!main.includes(cnpj), `CNPJ não deve estar no corpo de ${p}`);
+  }
+  for (const [path, doc] of Object.entries(html)) {
+    const foot = doc.split('<footer')[1];
+    assert.ok(foot.includes(cnpj), `CNPJ no rodapé de ${path}`);
+    assert.ok(foot.includes(address.street), `endereço no rodapé de ${path}`);
+    assert.ok(foot.includes(`© ${new Date().getFullYear()} ${companyConfig.legalName}`), `copyright em ${path}`);
+  }
+});
+
+test('dados oficiais corretos na configuração central', () => {
+  assert.equal(companyConfig.legalName, '4D Desenvolvimento Pessoal Ltda.');
+  assert.equal(companyConfig.cnpj, '49.142.726/0001-58');
+  assert.equal(companyConfig.address.street, 'Av. Prefeito Osmar Cunha, 416');
+  assert.equal(companyConfig.address.zip, '88015-100');
+  assert.equal(companyConfig.canonicalUrl, 'https://www.4ddesenvolvimentopessoal.com.br/');
+  assert.deepEqual(companyConfig.socialLinks, []);
+  assert.equal(companyConfig.contact.confirmed, false);
+});
+
+test('schema: Organization, WebSite e WebPage válidos, sem campos inventados', () => {
+  for (const [path, doc] of Object.entries(html)) {
+    if (path === '/404.html') {
+      assert.doesNotMatch(doc, /application\/ld\+json/);
+      assert.match(doc, /noindex/);
+      continue;
+    }
+    const json = JSON.parse(doc.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);
+    const types = json['@graph'].map((n) => n['@type']);
+    assert.ok(types.includes('Organization'));
+    assert.ok(types.includes('WebSite'));
+    assert.ok(types.some((t) => t === 'WebPage' || t === 'AboutPage'));
+    if (path !== '/') assert.ok(types.includes('BreadcrumbList'), path);
+    const org = json['@graph'].find((n) => n['@type'] === 'Organization');
+    assert.equal(org.taxID, '49.142.726/0001-58');
+    assert.equal(org.legalName, '4D Desenvolvimento Pessoal Ltda.');
+    assert.equal(org.address.addressCountry, 'BR');
+    for (const k of ['sameAs', 'telephone', 'contactPoint', 'founder', 'foundingDate', 'email']) {
+      assert.equal(org[k], undefined, `${k} não deve existir`);
+    }
+  }
+});
+
+test('canonical, sitemap e robots consistentes', async () => {
+  for (const [path, doc] of Object.entries(html)) {
+    if (path === '/404.html') continue;
+    assert.ok(doc.includes(`<link rel="canonical" href="${new URL(path, companyConfig.canonicalUrl).href}">`), path);
+  }
+  const sitemap = await readFile(join(site, 'sitemap.xml'), 'utf8');
+  const locs = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
+  assert.equal(locs.length, 4);
+  for (const loc of locs) {
+    assert.ok(loc.startsWith(companyConfig.canonicalUrl));
+    await stat(fileForUrl(loc));
+  }
+  assert.ok(!sitemap.includes('404'));
+  const robots = await readFile(join(site, 'robots.txt'), 'utf8');
+  assert.match(robots, /Sitemap: https:\/\/www\.4ddesenvolvimentopessoal\.com\.br\/sitemap\.xml/);
+});
+
+test('links internos e âncoras apontam para destinos existentes', async () => {
+  for (const [path, doc] of Object.entries(html)) {
+    const ids = new Set([...doc.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
+    assert.equal(ids.size, [...doc.matchAll(/\sid="([^"]+)"/g)].length, `ids duplicados em ${path}`);
+    for (const [, href] of doc.matchAll(/href="([^"]+)"/g)) {
+      if (/^https?:/.test(href)) continue;
+      const [target, hash] = href.split('#');
+      if (!target) { assert.ok(ids.has(hash), `âncora #${hash} em ${path}`); continue; }
+      const clean = target.split('?')[0];
+      await stat(fileForUrl(clean));
+      if (hash) {
+        const other = html[clean] ?? '';
+        assert.ok(other.includes(`id="${hash}"`), `âncora ${href} em ${path}`);
+      }
+    }
+  }
+});
+
+test('imagens têm alt e a Home não usa avatar fictício', () => {
+  for (const [path, doc] of Object.entries(html)) {
+    for (const [tag] of doc.matchAll(/<img\b[^>]*>/g)) assert.match(tag, /\salt="/, path);
+  }
+  assert.doesNotMatch(html['/'], /responsavel__foto/);
+});
+
+test('seções condicionais: projetos, contato e redes sociais', () => {
+  const vazio = projectsSection(companyConfig);
+  assert.doesNotMatch(vazio, /class="projeto"/);
+  assert.doesNotMatch(vazio, /<ul class="projetos">/);
+
+  const comProjeto = projectsSection({
+    ...companyConfig,
+    projects: [{ name: 'Projeto X', slug: 'x', description: 'Descrição', category: 'Plataforma', url: 'https://exemplo.com', status: 'Publicado', cta: 'Acessar' }],
+  });
+  assert.match(comProjeto, /class="projeto"/);
+  assert.match(comProjeto, /Projeto X/);
+
+  assert.equal(contactLinks(companyConfig), '');
+  assert.equal(contactLinks({ ...companyConfig, contact: { email: 'a@b.com', phone: null, whatsapp: null, confirmed: false } }), '');
+  assert.match(contactLinks({ ...companyConfig, contact: { email: 'a@b.com', phone: null, whatsapp: null, confirmed: true } }), /mailto:a@b\.com/);
+  assert.ok(!navItems(companyConfig).some((i) => i.href === '/contato/'));
+
+  assert.equal(socialLinks(companyConfig), '');
+  assert.doesNotMatch(footer(companyConfig), /class="social"/);
+});
+
+test('posicionamento: empresa, Método 4D, dois eixos, organizações e segmentos', () => {
+  const home = html['/'];
+  for (const termo of ['Descobrir', 'Decidir', 'Desenvolver', 'Destacar', 'Método 4D',
+    'Educação e desenvolvimento', 'Soluções digitais e organizacionais',
+    'Igrejas e comunidades', 'Empresas e organizações', 'Profissionais e especialistas']) {
+    assert.ok(home.includes(termo), termo);
+  }
+  const ordem = ['id="inicio"', 'id="sobre"', 'id="metodo"', 'id="atuacao"', 'id="organizacoes"', 'id="aplicado"', 'id="responsavel"'].map((s) => home.indexOf(s));
+  assert.ok(ordem.every((i) => i >= 0), 'todas as seções existem');
+  assert.deepEqual([...ordem].sort((a, b) => a - b), ordem, 'ordem Empresa → Método → Soluções');
+  assert.match(home, /class="cubo"/, 'cubo original preservado');
+});
