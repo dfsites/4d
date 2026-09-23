@@ -11,6 +11,20 @@ export function breadcrumbNav(page) {
   return `<nav class="breadcrumb container" aria-label="Você está em"><ol>${li}</ol></nav>`;
 }
 
+function googleTag(config) {
+  const id = config.analytics?.googleId;
+  if (!id) return '';
+  return `
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${esc(id)}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '${esc(id)}');
+  </script>`;
+}
+
 export function layout(config, page, body) {
   const canonical = absoluteUrl(config, page.path);
   const schema = page.noindex ? '' : `
@@ -21,7 +35,7 @@ export function layout(config, page, body) {
 
   return `<!DOCTYPE html>
 <html lang="${config.language}">
-<head>
+<head>${googleTag(config)}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${esc(page.title)}</title>

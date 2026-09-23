@@ -11,6 +11,7 @@ export const page = {
 
 export function render(config) {
   const site = hostOf(config.canonicalUrl);
+  const analytics = Boolean(config.analytics?.googleId);
   return `<section class="pagina-topo">
       <div class="container">
         <p class="rotulo">Documento legal</p>
@@ -32,14 +33,18 @@ export function render(config) {
         <p>Como em qualquer site, o servidor de hospedagem registra automaticamente dados técnicos de acesso — como endereço IP, data e hora, página acessada, navegador e sistema operacional. Esses registros são usados apenas para o funcionamento, a segurança e a estabilidade do site, e são mantidos pelo provedor de hospedagem conforme suas próprias práticas e o Marco Civil da Internet (Lei nº 12.965/2014).</p>
 
         <h2>4. Cookies, análise e terceiros</h2>
-        <p>Este site <strong>não utiliza cookies</strong>, ferramentas de análise de audiência, pixels de publicidade ou rastreadores. As fontes e demais arquivos são servidos pelo próprio site, sem carregar conteúdo de terceiros.</p>
+        ${analytics ? `<p>Este site utiliza o <strong>Google Analytics</strong>, serviço de análise de audiência do Google, para entender de forma agregada como o site é usado — por exemplo, quantas pessoas o visitam, quais páginas são acessadas, por quanto tempo, a partir de qual região aproximada, dispositivo e navegador. Para isso, o Google Analytics utiliza cookies e identificadores on-line armazenados no seu navegador.</p>
+        <p>A 4D não utiliza essas informações para identificar pessoas, não ativa recursos de publicidade no Google Analytics e não utiliza pixels de publicidade. Os dados são processados pelo Google, inclusive em servidores fora do Brasil, conforme a <a class="link" href="https://policies.google.com/privacy?hl=pt-BR" rel="noopener">Política de Privacidade do Google</a>.</p>
+        <p>Você pode bloquear ou apagar cookies nas configurações do seu navegador, ou impedir a coleta pelo Google Analytics instalando o <a class="link" href="https://tools.google.com/dlpage/gaoptout?hl=pt-BR" rel="noopener">complemento de desativação do Google Analytics</a>. O site continua funcionando normalmente sem esses cookies.</p>
+        <p>As fontes e os demais arquivos do site são servidos pelo próprio site.</p>` : `<p>Este site <strong>não utiliza cookies</strong>, ferramentas de análise de audiência, pixels de publicidade ou rastreadores. As fontes e demais arquivos são servidos pelo próprio site, sem carregar conteúdo de terceiros.</p>`}
         <p>O site contém um link para a consulta pública de CNPJ da Receita Federal. Ao acessá-lo, você passa a navegar em um serviço de terceiros, sujeito às regras dele.</p>
 
         <h2>5. Base legal e finalidade</h2>
-        <p>Os registros técnicos de acesso são tratados com base no legítimo interesse (art. 7º, IX, da LGPD) e no cumprimento de obrigação legal (art. 7º, II), com a finalidade de manter o site seguro e em funcionamento.</p>
+        <p>Os registros técnicos de acesso são tratados com base no legítimo interesse (art. 7º, IX, da LGPD) e no cumprimento de obrigação legal (art. 7º, II), com a finalidade de manter o site seguro e em funcionamento.</p>${analytics ? `
+        <p>Os dados de análise de audiência são tratados com base no legítimo interesse (art. 7º, IX, da LGPD), com a finalidade de medir o uso do site de forma agregada e melhorar seu conteúdo. A transferência internacional decorrente do uso do Google Analytics observa o art. 33 da LGPD.</p>` : ''}
 
         <h2>6. Compartilhamento</h2>
-        <p>A 4D não vende nem comercializa dados pessoais. Os registros técnicos podem ser acessados pelo provedor de hospedagem, na medida necessária à prestação do serviço, e por autoridades, quando houver determinação legal.</p>
+        <p>A 4D não vende nem comercializa dados pessoais. Os registros técnicos podem ser acessados pelo provedor de hospedagem, na medida necessária à prestação do serviço,${analytics ? ' os dados de análise de audiência são processados pelo Google, conforme descrito acima,' : ''} e por autoridades, quando houver determinação legal.</p>
 
         <h2>7. Seus direitos</h2>
         <p>Nos termos do art. 18 da LGPD, você pode solicitar confirmação da existência de tratamento, acesso, correção, anonimização, eliminação, informações sobre compartilhamento e demais direitos previstos em lei. As solicitações podem ser feitas por correspondência ao endereço indicado nesta política ou pelos canais de atendimento informados nos produtos e serviços da 4D.</p>

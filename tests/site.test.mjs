@@ -182,3 +182,15 @@ test('posicionamento: empresa, Método 4D, dois eixos, organizações e segmento
   assert.deepEqual([...ordem].sort((a, b) => a - b), ordem, 'ordem Empresa → Método → Soluções');
   assert.match(home, /class="cubo"/, 'cubo original preservado');
 });
+
+test('Google Analytics presente em todas as páginas e declarado na Política de Privacidade', () => {
+  const id = companyConfig.analytics.googleId;
+  assert.match(id, /^G-[A-Z0-9]+$/);
+  for (const [path, doc] of Object.entries(html)) {
+    assert.ok(doc.includes(`googletagmanager.com/gtag/js?id=${id}`), `gtag ausente em ${path}`);
+    assert.ok(doc.includes(`gtag('config', '${id}')`), `config ausente em ${path}`);
+  }
+  const politica = html['/politica-de-privacidade/'];
+  assert.match(politica, /Google Analytics/);
+  assert.doesNotMatch(politica, /não utiliza cookies/);
+});

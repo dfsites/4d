@@ -31,6 +31,9 @@ export const companyConfig = {
   // Formato: { name: 'LinkedIn', url: 'https://...' }. Vazio = nada é renderizado.
   socialLinks: [],
 
+  // null desativa o Google Analytics e o trecho correspondente da Política de Privacidade.
+  analytics: { googleId: 'G-931JV5ZF55' },
+
   responsiblePerson: {
     name: 'Daniel Ferreira',
     role: 'Administrador e empreendedor',
