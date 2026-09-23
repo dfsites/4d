@@ -43,7 +43,18 @@ Site: https://www.4ddesenvolvimentopessoal.com.br/ · Repositório: https://gith
 - Compressão, cache, HSTS e cabeçalhos de segurança no `.htaccess`.
 - Lighthouse (laboratório, home): celular 79 → 85, LCP 1,8 s → 1,5 s; acessibilidade, boas práticas e SEO em 100.
 
+### 6. Correção mobile (seção Método 4D aplicado)
+- No celular, os nomes Descobrir, Desenvolver e Destacar quebravam no meio da palavra porque a coluna da dimensão ficava com só 18% da largura.
+- Corrigido: no mobile a coluna usa a largura toda e o nome permanece em uma linha. Publicado em produção.
+
 Detalhes técnicos, inventário de URLs e medições: `docs/seo-auditoria.md`.
+
+## Arquivos de relatório neste repositório
+
+| Arquivo | Conteúdo |
+|---|---|
+| `docs/relatorio-2026-09-23.md` | Este resumo do trabalho do dia, pendências e como atualizar o site |
+| `docs/seo-auditoria.md` | Auditoria técnica de SEO (inventário de URLs, o que foi corrigido/novo/pendente, medições Lighthouse) |
 
 ## Pendências
 
