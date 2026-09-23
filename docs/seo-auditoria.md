@@ -47,6 +47,7 @@ Redirecionamentos verificados (um salto, 301, parâmetros preservados): `http://
 - CSS que bloqueava a renderização → embutido no HTML (4 KB comprimido).
 - GA4 carregado após o evento `load` (a fila `dataLayer` é criada no início, então a visita continua sendo registrada).
 - Publicação: `server-dir` absoluto `/www/`, necessário para remover arquivos antigos no servidor.
+- Mobile — seção `#aplicado` (Método 4D aplicado): nomes Descobrir / Desenvolver / Destacar quebravam no meio da palavra porque `.matriz tbody th` mantinha `width: 18%` no layout em bloco; corrigido para `width: 100%` com `white-space: nowrap`.
 
 ### Novo
 - Página `/metodo-4d/`: definição, as quatro dimensões com pergunta central, o que entra e o que sai, aplicação a pessoas/projetos/organizações, exemplo **ilustrativo** (sinalizado como tal), limites, dúvidas frequentes visíveis (sem FAQPage) e próximo passo.

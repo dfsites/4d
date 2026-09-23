@@ -115,8 +115,8 @@ export function projectsSection(config) {
           <h2 id="projetos-titulo">Uma empresa por trás de cada produto</h2>
         </div>
         <div>
-          <p>Cursos, plataformas, aplicativos, ferramentas e projetos educacionais desenvolvidos pela 4D são assinados por <strong>${esc(config.legalName)}</strong> Os dados oficiais da empresa estão no rodapé deste site.</p>
-          <p>${projects.length ? 'Conheça alguns deles:' : 'Os produtos e projetos da 4D serão apresentados aqui à medida que forem publicados.'}</p>
+          <p>Cursos, plataformas, aplicativos, ferramentas e projetos educacionais desenvolvidos pela 4D são assinados por <strong>${esc(config.legalName)}</strong>.</p>
+          ${projects.length ? '<p>Conheça alguns deles:</p>' : ''}
         </div>
       </div>
       ${list ? `<div class="container">${list}</div>` : ''}
