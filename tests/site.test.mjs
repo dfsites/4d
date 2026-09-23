@@ -70,7 +70,8 @@ test('dados da empresa ficam no rodapé de todas as páginas (e não no corpo da
     const foot = doc.split('<footer')[1];
     assert.ok(foot.includes(cnpj), `CNPJ no rodapé de ${path}`);
     assert.ok(foot.includes(address.street), `endereço no rodapé de ${path}`);
-    assert.ok(foot.includes(`© ${new Date().getFullYear()} ${companyConfig.legalName}`), `copyright em ${path}`);
+    assert.ok(foot.includes(`© ${new Date().getFullYear()} Todos os direitos reservados.`), `copyright em ${path}`);
+    assert.ok(foot.includes(`${companyConfig.legalName} · CNPJ ${cnpj} · ${address.street}`), `linha legal em ${path}`);
   }
 });
 
