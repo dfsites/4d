@@ -26,4 +26,7 @@ Publicação: cada push na `main` roda lint, build e testes e publica via FTP (`
 A senha do FTP fica no secret `FTP_PASSWORD` do repositório. A KingHost bloqueia FTP de IPs fora do Brasil;
 o acesso global precisa estar liberado em Painel KingHost → Gerenciar FTP → Política de IPs.
 
+Relatórios: `docs/relatorio-2026-09-23.md` (resumo do trabalho e pendências) e `docs/seo-auditoria.md` (auditoria técnica de SEO).
+Imagens de compartilhamento e ícones: `scripts/gerar-imagens.ps1`.
+
 A fonte Inter (`src/assets/fonts`) é distribuída sob a SIL Open Font License.
