@@ -125,7 +125,14 @@ export function projectsSection(config) {
 
 export function footer(config) {
   const year = new Date().getFullYear();
-  const lines = addressLines(config).map(esc).join('<br>');
+  const a = config.address;
+  const empresa = [
+    config.legalName,
+    `CNPJ ${config.cnpj}`,
+    a.street,
+    `${a.city}/${a.state}`,
+    `CEP ${a.zip}`,
+  ].map(esc).join(' · ');
   const contato = hasConfirmedContact(config) ? '<li><a href="/contato/">Contato</a></li>' : '';
   return `<footer class="rodape">
     <div class="container rodape__grid">
@@ -134,10 +141,6 @@ export function footer(config) {
           ${logo()}
         </a>
         <p>Educação, desenvolvimento e tecnologia em quatro dimensões.</p>
-      </div>
-      <div>
-        <p class="rodape__titulo">${esc(config.legalName)}</p>
-        <p>CNPJ ${esc(config.cnpj)}<br>${lines}</p>
         ${contactLinks(config)}
       </div>
       <nav aria-label="Institucional">
@@ -153,7 +156,8 @@ export function footer(config) {
       </nav>
     </div>
     <div class="container rodape__base">
-      <p>© ${year} ${esc(config.legalName)} Todos os direitos reservados.</p>
+      <p>© ${year} Todos os direitos reservados.</p>
+      <p class="rodape__legal">${empresa}</p>
     </div>
   </footer>`;
 }

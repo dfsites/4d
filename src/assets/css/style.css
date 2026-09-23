@@ -366,7 +366,7 @@ main:focus { outline: none; }
 
 /* Rodapé */
 .rodape { background: var(--tinta); color: #b9b5d1; font-size: .93rem; }
-.rodape__grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; padding: clamp(3rem, 6vw, 4.5rem) 0; }
+.rodape__grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 2.5rem; padding: clamp(3rem, 6vw, 4.5rem) 0; }
 .rodape__marca p { margin-top: 1.25rem; max-width: 22em; }
 .rodape__titulo { margin-bottom: .75rem; font-weight: 700; color: var(--branco); }
 .rodape__links { list-style: none; }
@@ -376,6 +376,7 @@ main:focus { outline: none; }
 .rodape__links a:hover { color: var(--branco); text-decoration: underline; }
 .rodape__base { padding: 1.25rem 0 1.75rem; border-top: 1px solid rgba(255, 255, 255, .12); font-size: .85rem; }
 .rodape__base p { margin: 0; }
+.rodape__legal { margin-top: .45rem !important; color: #9a95b8; }
 .social { list-style: none; display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
 
 /* Responsivo */
@@ -392,8 +393,8 @@ main:focus { outline: none; }
   .eixo, .eixo + .eixo { padding: 2rem 0; border-left: 0; }
   .eixo + .eixo { border-top: 1px solid var(--linha); }
   .segmentos { grid-template-columns: minmax(0, 1fr); }
-  .rodape__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .rodape__marca { grid-column: 1 / -1; }
+  .rodape__grid { grid-template-columns: minmax(0, 1fr); }
+  .rodape__marca { grid-column: auto; }
 
   .matriz, .matriz tbody, .matriz tr, .matriz th, .matriz td { display: block; width: 100%; }
   .matriz thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
