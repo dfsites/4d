@@ -353,7 +353,7 @@ main:focus { outline: none; }
 .etapa:nth-child(3) { --cor-etapa: #ff9f43; }
 .etapa:nth-child(4) { --cor-etapa: #3a3558; }
 .etapa .etapa__num { margin: 0; font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1; color: var(--cor-etapa); }
-.etapa:nth-child(3) .etapa__num { color: #e07b12; }
+.etapa:nth-child(3) .etapa__num { color: #c8660a; }
 .etapa h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
 .etapa__lead { font-weight: 600; color: var(--tinta); }
 .etapa p, .etapa li { color: #3c3a4d; }
