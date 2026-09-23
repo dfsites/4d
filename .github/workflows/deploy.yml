@@ -24,3 +24,4 @@ jobs:
           protocol: ftp
           local-dir: ./site/
           server-dir: /www/
+          log-level: verbose
