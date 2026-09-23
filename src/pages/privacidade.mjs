@@ -4,6 +4,7 @@ import { addressLines } from '../lib/components.mjs';
 export const page = {
   path: '/politica-de-privacidade/',
   nav: 'privacidade',
+  legal: true,
   title: 'Política de Privacidade | 4D Desenvolvimento Pessoal Ltda.',
   description: 'Política de Privacidade do site institucional da 4D Desenvolvimento Pessoal Ltda. (CNPJ 49.142.726/0001-58), em conformidade com a LGPD.',
   breadcrumb: [{ name: 'Política de Privacidade', path: '/politica-de-privacidade/' }],

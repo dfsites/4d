@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { companyConfig } from '../src/config/companyConfig.mjs';
-import { absoluteUrl } from '../src/lib/html.mjs';
+import { absoluteUrl, pageUpdatedAt } from '../src/lib/html.mjs';
 import { layout } from '../src/lib/layout.mjs';
 import * as home from '../src/pages/home.mjs';
 import * as sobre from '../src/pages/sobre.mjs';
@@ -31,6 +31,39 @@ async function assetVersion() {
   return hash.digest('hex').slice(0, 10);
 }
 
+function manifest(config) {
+  return {
+    name: config.brandName,
+    short_name: '4D',
+    description: config.description,
+    lang: config.language,
+    start_url: '/',
+    scope: '/',
+    display: 'browser',
+    background_color: '#ffffff',
+    theme_color: '#5b3df5',
+    icons: [
+      { src: '/assets/img/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { src: '/assets/img/icon-512.png', sizes: '512x512', type: 'image/png' },
+      { src: '/assets/img/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+    ],
+  };
+}
+
+// Conservador: não mexe em espaços dentro de valores (calc, seletores descendentes).
+export function minifyCss(css) {
+  return css
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/\s*([{};,>])\s*/g, '$1')
+    .replace(/;}/g, '}')
+    .trim();
+}
+
+function minifyHtml(html) {
+  return html.split('\n').map((line) => line.trim()).filter(Boolean).join('\n');
+}
+
 export async function build(config = companyConfig) {
   await rm(out, { recursive: true, force: true });
   await mkdir(out, { recursive: true });
@@ -45,19 +78,24 @@ export async function build(config = companyConfig) {
     const page = { ...mod.page, assetVersion: version };
     const file = join(out, outputFile(page));
     await mkdir(dirname(file), { recursive: true });
-    await writeFile(file, layout(config, page, mod.render(config)));
+    await writeFile(file, `${minifyHtml(layout(config, page, mod.render(config)))}\n`);
     written.push(page);
   }
 
   const urls = written
     .filter((p) => p.sitemap !== false && !p.noindex)
-    .map((p) => `  <url>\n    <loc>${absoluteUrl(config, p.path)}</loc>\n    <lastmod>${config.contentUpdatedAt}</lastmod>\n  </url>`)
+    .map((p) => `  <url>\n    <loc>${absoluteUrl(config, p.path)}</loc>\n    <lastmod>${pageUpdatedAt(config, p)}</lastmod>\n  </url>`)
     .join('\n');
   await writeFile(join(out, 'sitemap.xml'),
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
 
   await writeFile(join(out, 'robots.txt'),
     `User-agent: *\nAllow: /\n\nSitemap: ${absoluteUrl(config, '/sitemap.xml')}\n`);
+
+  await writeFile(join(out, 'site.webmanifest'), `${JSON.stringify(manifest(config), null, 2)}\n`);
+
+  const css = join(out, 'assets/css/style.css');
+  await writeFile(css, minifyCss(await readFile(css, 'utf8')));
 
   return written;
 }

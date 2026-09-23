@@ -5,7 +5,7 @@ export const page = {
   noindex: true,
   sitemap: false,
   title: 'Página não encontrada | 4D Desenvolvimento Pessoal',
-  description: 'O endereço acessado não existe no site da 4D Desenvolvimento Pessoal.',
+  description: 'O endereço acessado não existe no site da 4D Desenvolvimento Pessoal. Volte ao início.',
 };
 
 export function render() {

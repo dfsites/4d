@@ -5,8 +5,8 @@ import { appliedColumns, axes, dimensions, fronts, segments } from '../content/m
 export const page = {
   path: '/',
   nav: 'inicio',
-  title: '4D Desenvolvimento Pessoal Ltda. | Educação, Desenvolvimento e Tecnologia',
-  description: 'A 4D Desenvolvimento Pessoal Ltda. (CNPJ 49.142.726/0001-58), de Florianópolis/SC, desenvolve soluções educacionais, digitais e institucionais para pessoas e organizações a partir do Método 4D.',
+  title: '4D Desenvolvimento Pessoal Ltda. | Educação e Tecnologia',
+  description: '4D Desenvolvimento Pessoal Ltda. (CNPJ 49.142.726/0001-58): educação, desenvolvimento e tecnologia para pessoas e organizações a partir do Método 4D.',
 };
 
 function cubo() {

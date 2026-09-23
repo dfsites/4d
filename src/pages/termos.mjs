@@ -3,6 +3,7 @@ import { esc, formatDate, hostOf } from '../lib/html.mjs';
 export const page = {
   path: '/termos-de-uso/',
   nav: 'termos',
+  legal: true,
   title: 'Termos de Uso do Site | 4D Desenvolvimento Pessoal Ltda.',
   description: 'Termos de Uso do site institucional da 4D Desenvolvimento Pessoal Ltda. (CNPJ 49.142.726/0001-58).',
   breadcrumb: [{ name: 'Termos de Uso', path: '/termos-de-uso/' }],

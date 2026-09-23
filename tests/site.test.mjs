@@ -194,3 +194,37 @@ test('Google Analytics presente em todas as páginas e declarado na Política de
   assert.match(politica, /Google Analytics/);
   assert.doesNotMatch(politica, /não utiliza cookies/);
 });
+
+test('SEO: títulos, descrições, Open Graph, ícones, manifesto e datas', async () => {
+  const titles = new Set();
+  const descriptions = new Set();
+  for (const [path, doc] of Object.entries(html)) {
+    const title = doc.match(/<title>(.*?)<\/title>/)[1];
+    const description = doc.match(/<meta name="description" content="(.*?)">/)[1];
+    assert.ok(title.length <= 60, `título longo em ${path}: ${title.length}`);
+    assert.ok(description.length >= 70 && description.length <= 160, `descrição fora do padrão em ${path}: ${description.length}`);
+    titles.add(title);
+    descriptions.add(description);
+    for (const tag of ['og:image"', 'og:image:alt', 'twitter:card" content="summary_large_image', 'rel="apple-touch-icon"', 'rel="manifest"', 'href="/favicon.ico"']) {
+      assert.ok(doc.includes(tag), `${tag} ausente em ${path}`);
+    }
+  }
+  assert.equal(titles.size, Object.keys(html).length, 'títulos duplicados');
+  assert.equal(descriptions.size, Object.keys(html).length, 'descrições duplicadas');
+
+  for (const f of ['favicon.ico', 'assets/img/og-4d.png', 'assets/img/apple-touch-icon.png', 'assets/img/icon-192.png', 'assets/img/icon-512.png', 'assets/img/icon-maskable-512.png']) {
+    assert.ok((await stat(join(site, f))).size > 0, f);
+  }
+  const manifest = JSON.parse(await readFile(join(site, 'site.webmanifest'), 'utf8'));
+  assert.equal(manifest.name, companyConfig.brandName);
+  for (const icon of manifest.icons) await stat(join(site, icon.src));
+
+  const json = JSON.parse(html['/'].match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);
+  const org = json['@graph'].find((n) => n['@type'] === 'Organization');
+  assert.ok(org.logo.url.endsWith('/assets/img/icon-512.png'));
+  const pagina = json['@graph'].find((n) => n['@type'] === 'WebPage');
+  assert.equal(pagina.dateModified, companyConfig.contentUpdatedAt);
+
+  const sitemap = await readFile(join(site, 'sitemap.xml'), 'utf8');
+  assert.match(sitemap, new RegExp(`politica-de-privacidade/</loc>\\s*<lastmod>${companyConfig.legalUpdatedAt}`));
+});

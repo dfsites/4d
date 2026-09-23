@@ -31,7 +31,13 @@ export function layout(config, page, body) {
   <script type="application/ld+json">${JSON.stringify(buildSchema(config, page))}</script>`;
   const indexing = page.noindex
     ? '<meta name="robots" content="noindex, follow">'
-    : `<link rel="canonical" href="${canonical}">`;
+    : `<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <link rel="canonical" href="${canonical}">`;
+  const image = config.shareImage;
+  const imageUrl = absoluteUrl(config, image.path);
+  const preconnect = config.analytics?.googleId
+    ? '\n  <link rel="preconnect" href="https://www.googletagmanager.com">'
+    : '';
 
   return `<!DOCTYPE html>
 <html lang="${config.language}">
@@ -47,9 +53,23 @@ export function layout(config, page, body) {
   <meta property="og:title" content="${esc(page.title)}">
   <meta property="og:description" content="${esc(page.description)}">
   <meta property="og:url" content="${canonical}">
-  <meta name="twitter:card" content="summary">
-  <meta name="theme-color" content="#5b3df5">
+  <meta property="og:image" content="${imageUrl}">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="${image.width}">
+  <meta property="og:image:height" content="${image.height}">
+  <meta property="og:image:alt" content="${esc(image.alt)}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${esc(page.title)}">
+  <meta name="twitter:description" content="${esc(page.description)}">
+  <meta name="twitter:image" content="${imageUrl}">
+  <meta name="twitter:image:alt" content="${esc(image.alt)}">
+  <meta name="author" content="${esc(config.legalName)}">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#5b3df5">${preconnect}
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/style.css?v=${page.assetVersion}">
   <script>document.documentElement.classList.add('js')</script>${schema}

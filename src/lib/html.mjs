@@ -8,6 +8,10 @@ export function absoluteUrl(config, path) {
   return new URL(path.replace(/^\//, ''), config.canonicalUrl).href;
 }
 
+export function pageUpdatedAt(config, page) {
+  return page.legal ? config.legalUpdatedAt : config.contentUpdatedAt;
+}
+
 export function formatDate(iso) {
   const [y, m, d] = iso.split('-').map(Number);
   const meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho',

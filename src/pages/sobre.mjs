@@ -5,8 +5,8 @@ import { axes, dimensions, segments } from '../content/metodo.mjs';
 export const page = {
   path: '/sobre/',
   nav: 'sobre',
-  title: 'Sobre a 4D Desenvolvimento Pessoal Ltda. | Educação, Desenvolvimento e Tecnologia',
-  description: 'Conheça a 4D Desenvolvimento Pessoal Ltda., CNPJ 49.142.726/0001-58, empresa de Florianópolis/SC que desenvolve soluções educacionais, digitais e institucionais a partir do Método 4D.',
+  title: 'Sobre a 4D Desenvolvimento Pessoal Ltda. | Método 4D',
+  description: 'Conheça a 4D Desenvolvimento Pessoal Ltda. (CNPJ 49.142.726/0001-58), de Florianópolis/SC, e o Método 4D: Descobrir, Decidir, Desenvolver e Destacar.',
   schemaType: 'AboutPage',
   breadcrumb: [{ name: 'Sobre a 4D', path: '/sobre/' }],
 };

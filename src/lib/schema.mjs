@@ -1,4 +1,4 @@
-import { absoluteUrl } from './html.mjs';
+import { absoluteUrl, pageUpdatedAt } from './html.mjs';
 
 export function buildSchema(config, page) {
   const site = config.canonicalUrl;
@@ -12,7 +12,17 @@ export function buildSchema(config, page) {
     name: config.brandName,
     legalName: config.legalName,
     taxID: config.cnpj,
+    description: config.description,
     url: site,
+    logo: {
+      '@type': 'ImageObject',
+      '@id': `${site}#logo`,
+      url: absoluteUrl(config, '/assets/img/icon-512.png'),
+      width: 512,
+      height: 512,
+      caption: config.brandName,
+    },
+    image: { '@id': `${site}#logo` },
     address: {
       '@type': 'PostalAddress',
       streetAddress: config.address.street,
@@ -31,6 +41,8 @@ export function buildSchema(config, page) {
     '@id': siteId,
     url: site,
     name: config.brandName,
+    alternateName: config.legalName,
+    description: config.description,
     inLanguage: config.language,
     publisher: { '@id': orgId },
   };
@@ -44,6 +56,14 @@ export function buildSchema(config, page) {
     inLanguage: config.language,
     isPartOf: { '@id': siteId },
     about: { '@id': orgId },
+    publisher: { '@id': orgId },
+    dateModified: pageUpdatedAt(config, page),
+    primaryImageOfPage: {
+      '@type': 'ImageObject',
+      url: absoluteUrl(config, config.shareImage.path),
+      width: config.shareImage.width,
+      height: config.shareImage.height,
+    },
   };
 
   const graph = [organization, website, webpage];

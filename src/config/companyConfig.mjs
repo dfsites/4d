@@ -31,6 +31,15 @@ export const companyConfig = {
   // Formato: { name: 'LinkedIn', url: 'https://...' }. Vazio = nada é renderizado.
   socialLinks: [],
 
+  description: 'Educação, desenvolvimento e tecnologia para pessoas e organizações a partir do Método 4D: Descobrir, Decidir, Desenvolver e Destacar.',
+
+  shareImage: {
+    path: '/assets/img/og-4d.png',
+    width: 1200,
+    height: 630,
+    alt: '4D Desenvolvimento Pessoal — Educação, desenvolvimento e tecnologia a partir do Método 4D',
+  },
+
   // null desativa o Google Analytics e o trecho correspondente da Política de Privacidade.
   analytics: { googleId: 'G-931JV5ZF55' },
 
